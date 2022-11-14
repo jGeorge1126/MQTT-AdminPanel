@@ -11,7 +11,7 @@ import RoutineMachine from "./RountineMachine";
 import icon from "../marker-icon.png";
 
 // const ENDPOINT = "http://127.0.0.1:8000";
-const ENDPOINT = "http://54.89.211.240:8000";
+const ENDPOINT = "http://54.89.211.240:8080";
 const socket = socketIOClient(ENDPOINT);
 
 export const PageVisitsTable = () => {
