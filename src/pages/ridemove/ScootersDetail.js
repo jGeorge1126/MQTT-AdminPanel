@@ -3,14 +3,27 @@ import React, { useState, useEffect } from "react";
 import { Col, Row, Nav, Card, Button, Table, Dropdown, ProgressBar, Pagination, ButtonGroup, Form } from '@themesberg/react-bootstrap';
 import { useParams } from 'react-router-dom';
 import axios from "axios";
+import socketIOClient from "socket.io-client";
+const ENDPOINT = "http://127.0.0.1:8080";
+// const ENDPOINT = "http://54.89.211.240:8080";
+const socket = socketIOClient(ENDPOINT);
 
 // const location = useLocation();
 // console.log(location.state);
 const ScootersDetail = (props) => {
   const {scooterID} = useParams()
-  const [lockBattery, setLockBattery] = useState(true);
+  const [scooterStatus, setScooterStatus] = useState({});
+
   console.log(props.location)
   console.log(scooterID)
+  useEffect(() => {
+    socket.on("sendMessage", data => {
+      var jsonResult = JSON.parse(data.text);
+      if(jsonResult.i === scooterID){
+        setScooterStatus(jsonResult);
+      }
+    });
+  }, []);
   // const params = props.location.state
   const save = () => {
     var params = new Object;
@@ -103,7 +116,7 @@ const ScootersDetail = (props) => {
             <Col xs={12} xl={6} className="mb-4">
               <h5 className="p-0">Scooter Query</h5>
               <Card border="light" className="shadow-sm p-4">
-
+                { JSON.stringify(scooterStatus) }
               </Card>
             </Col>
           </Row>

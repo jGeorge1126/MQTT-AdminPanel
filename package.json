@@ -53,6 +53,7 @@
     "react-router-hash-link": "^2.3.1",
     "react-scripts": "3.4.3",
     "react-transition-group": "^4.4.1",
+    "selenium-webdriver": "3",
     "simplebar-react": "^2.3.0",
     "socket.io-client": "^4.5.3"
   },
