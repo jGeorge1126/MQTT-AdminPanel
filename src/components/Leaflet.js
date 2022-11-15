@@ -1,5 +1,6 @@
-
+import L from "leaflet";
 import React, { useState, useEffect, Fragment } from "react";
+import { useHistory } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp, faArrowDown, faArrowUp, faEdit, faEllipsisH, faExternalLinkAlt, faEye, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Nav, Card, Button, Table, Dropdown, ProgressBar, Pagination, ButtonGroup } from '@themesberg/react-bootstrap';
@@ -8,11 +9,20 @@ import { pageVisits } from "../data/tables";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import socketIOClient from "socket.io-client";
 import RoutineMachine from "./RountineMachine";
-import icon from "../marker-icon.png";
+import "../assets/img/lite_ride/withoutbattery.png";
 
-// const ENDPOINT = "http://127.0.0.1:8000";
-const ENDPOINT = "http://54.89.211.240:8080";
+const ENDPOINT = "http://127.0.0.1:8080";
+// const ENDPOINT = "http://54.89.211.240:8080";
 const socket = socketIOClient(ENDPOINT);
+const centerPosition = [43.6532, -79.3832];
+
+var icon = L.icon({
+  iconUrl: 
+//    "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png",
+  require("../assets/img/lite_ride/withoutbattery.png"),
+  
+  iconSize: [30, 30]
+})
 
 export const PageVisitsTable = () => {
   const TableRow = (props) => {
@@ -62,32 +72,11 @@ export const PageVisitsTable = () => {
   );
 };
 
-export const ScootersInUse = () => {
-  return (
-    <Card border="light" className="shadow-sm p-4">
-      <h5></h5>
-      <MapContainer
-        doubleClickZoom={false}
-        id="scooterinusemap"
-        zoom={14}
-        center={[43.6532, 79.3832]}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {/* <RoutineMachine /> */}
-      </MapContainer>
-    </Card>
-  );
-};
-
-export const AvailableScooters = () => {
+export const AvailableScooters = (data) => {
   const [scootermarkers, setScootermarker] = useState([]);
-  
+  const history = useHistory();
   useEffect(() => {
     socket.on("sendMessage", data => {
-      console.log(data);
       var jsonResult = JSON.parse(data.text);
       
       let updatedvalue = {
@@ -107,6 +96,7 @@ export const AvailableScooters = () => {
         updatedvalue.lng = temp[1]
       } else if(jsonResult.a == 27){
         updatedvalue.b = jsonResult.b
+        updatedvalue.c = jsonResult.c
       }
       
       setScootermarker(p => {
@@ -120,60 +110,136 @@ export const AvailableScooters = () => {
             ...updatedvalue
           }
         }
-        console.log(prevScooters, "prevScooters")
         return [...prevScooters]
       })
-      // if(jsonResult["i"] == "TEST-999666" && jsonResult["a"] == 19){
-      //   var temp = jsonResult["g"].split(",");
-      //   setResponselat(temp[0]);
-      //   setResponselng(temp[1]);
-      // }
-      // if(jsonResult["i"] == "TEST-999666" && jsonResult["a"] == 27){
-      //   setResponsebat(jsonResult["b"]);
-      // }
     });
   }, []);
-  console.log(scootermarkers);
-  return (
-    <Card border="light" className="shadow-sm p-4">
-      <MapContainer
-        doubleClickZoom={false}
-        id="availablescootersmap"
-        zoom={14}
-        center={[47.90722,13.76072]}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        { (scootermarkers || []).filter(s => s.lat && s.lng).map(s => 
-          <Marker position={[s.lat, s.lng]}>
-            <Popup>
-              { s.battery >= 0 ? s.b : '' }%
-            </Popup>
-          </Marker>
-        )}
-        {/* <RoutineMachine /> */}
-      </MapContainer>
-    </Card>
-  );
-};
-
-export const LowBatteryScooters = () => {
-  return (
-    <Card border="light" className="shadow-sm p-4">
-      <MapContainer
-        doubleClickZoom={false}
-        id="lowbatteryscootersmap"
-        zoom={14}
-        center={[73.6532, 79.3832]}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {/* <RoutineMachine /> */}
-      </MapContainer>
-    </Card>
-  );
+  if(data.type === "available"){
+    return (
+      <Card border="light" className="shadow-sm p-4">
+        <MapContainer
+          doubleClickZoom={false}
+          id="availablescootersmap"
+          zoom={14}
+          center={centerPosition}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {(scootermarkers || []).filter(s => s.lat && s.lng && s.b > 20).map(s => 
+              <Marker position={[s.lat, s.lng]} key={s.i} icon={icon} >
+                <Popup>
+                  ID: { s.i }<br/>
+                  Location: { s.lat }, { s.lng }<br/>
+                  Battery: { s.b >= 0 ? s.b : '' }%<br/>
+                  Status: { s.c == 0 ? 'On' : 'Off' }
+                </Popup>
+              </Marker>
+            )
+          }
+          {/* <RoutineMachine /> */}
+        </MapContainer>
+      </Card>
+    );
+  } else if (data.type === "inuse") {
+    return (
+      <Card border="light" className="shadow-sm p-4">
+        <MapContainer
+          doubleClickZoom={false}
+          id="availablescootersmap"
+          zoom={14}
+          center={centerPosition}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {(scootermarkers || []).filter(s => s.lat && s.lng && s.c == 0).map(s => 
+              <Marker position={[s.lat, s.lng]} key={s.i} icon={icon} >
+                <Popup>
+                  ID: { s.i }<br/>
+                  Location: { s.lat }, { s.lng }<br/>
+                  Battery: { s.b >= 0 ? s.b : '' }%<br/>
+                  Status: { s.c == 0 ? 'On' : 'Off' }
+                </Popup>
+              </Marker>
+            )
+          }
+          {/* <RoutineMachine /> */}
+        </MapContainer>
+      </Card>
+    );
+  } else if (data.type === "lowbattery") {
+    return (
+      <Card border="light" className="shadow-sm p-4">
+        <MapContainer
+          doubleClickZoom={false}
+          id="availablescootersmap"
+          zoom={14}
+          center={centerPosition}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {(scootermarkers || []).filter(s => s.lat && s.lng && s.b < 20).map(s => 
+              <Marker position={[s.lat, s.lng]} key={s.i} icon={icon} >
+                <Popup>
+                  ID: { s.i }<br/>
+                  Location: { s.lat }, { s.lng }<br/>
+                  Battery: { s.b >= 0 ? s.b : '' }%<br/>
+                  Status: { s.c == 0 ? 'On' : 'Off' }
+                </Popup>
+              </Marker>
+            )
+          }
+          {/* <RoutineMachine /> */}
+        </MapContainer>
+      </Card>
+    );
+  } else if (data.type === "all") {
+    return (
+      <Card border="light" className="shadow-sm p-4">
+        <MapContainer
+          doubleClickZoom={false}
+          id="availablescootersmap"
+          zoom={14}
+          center={centerPosition}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {(scootermarkers || []).filter(s => s.lat && s.lng).map(s => 
+              <Marker
+                position={[s.lat, s.lng]}
+                key={s.i}
+                icon={icon} 
+                eventHandlers={{
+                  click: () => {
+                    console.log(s);
+                    // navigate(`/ScooterDetail`,{state:s});
+                    history.push({
+                      pathname: '/detail/' + s.i,
+                      state: s,
+                    }); 
+                  },
+                }}
+              >
+                <Popup>
+                  ID: { s.i }<br/>
+                  Location: { s.lat }, { s.lng }<br/>
+                  Battery: { s.b >= 0 ? s.b : '' }%<br/>
+                  Status: { s.c == 0 ? 'On' : 'Off' }
+                </Popup>
+              </Marker>
+            )
+          }
+          {/* <RoutineMachine /> */}
+        </MapContainer>
+      </Card>
+    );
+  }
+  
 };

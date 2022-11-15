@@ -2,12 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { Route, Switch, Redirect } from "react-router-dom";
 import { Routes } from "../routes";
 
+// ride move
+import Scooters from "./ridemove/Scooters";
+import ScootersDetail from "./ridemove/ScootersDetail";
+import Customers from "./ridemove/Customers";
+import Invoices from "./ridemove/Invoices";
+import Pricing from "./ridemove/Pricing";
+import Settings from "./ridemove/Settings";
+import IDVerification from "./ridemove/IDVerification";
+import UserAgreement from "./ridemove/UserAgreement";
+import HowToRide from "./ridemove/HowToRide";
+
 // pages
 import Presentation from "./Presentation";
 import Upgrade from "./Upgrade";
 import DashboardOverview from "./dashboard/DashboardOverview";
 import Transactions from "./Transactions";
-import Settings from "./Settings";
+// import Settings from "./Settings";
 import BootstrapTables from "./tables/BootstrapTables";
 import Signin from "./examples/Signin";
 import Signup from "./examples/Signup";
@@ -100,7 +111,7 @@ const RouteWithSidebar = ({ component: Component, ...rest }) => {
 
 export default () => (
   <Switch>
-    <RouteWithLoader exact path={Routes.Presentation.path} component={Presentation} />
+    {/* <RouteWithLoader exact path={Routes.Presentation.path} component={Presentation} /> */}
     <RouteWithLoader exact path={Routes.Signin.path} component={Signin} />
     <RouteWithLoader exact path={Routes.Signup.path} component={Signup} />
     <RouteWithLoader exact path={Routes.ForgotPassword.path} component={ForgotPassword} />
@@ -109,11 +120,22 @@ export default () => (
     <RouteWithLoader exact path={Routes.NotFound.path} component={NotFoundPage} />
     <RouteWithLoader exact path={Routes.ServerError.path} component={ServerError} />
 
+    {/* ride move */}
+    <RouteWithSidebar exact path={Routes.Scooters.path} component={Scooters} />
+    <RouteWithSidebar exact path={Routes.ScootersDetail.path} component={ScootersDetail} />
+    <RouteWithSidebar exact path={Routes.Customers.path} component={Customers} />
+    <RouteWithSidebar exact path={Routes.Invoices.path} component={Invoices} />
+    <RouteWithSidebar exact path={Routes.Pricing.path} component={Pricing} />
+    <RouteWithSidebar exact path={Routes.Settings.path} component={Settings} />
+    <RouteWithSidebar exact path={Routes.IDVerification.path} component={IDVerification} />
+    <RouteWithSidebar exact path={Routes.UserAgreement.path} component={UserAgreement} />
+    <RouteWithSidebar exact path={Routes.HowToRide.path} component={HowToRide} />
+
     {/* pages */}
     <RouteWithSidebar exact path={Routes.DashboardOverview.path} component={DashboardOverview} />
     <RouteWithSidebar exact path={Routes.Upgrade.path} component={Upgrade} />
     <RouteWithSidebar exact path={Routes.Transactions.path} component={Transactions} />
-    <RouteWithSidebar exact path={Routes.Settings.path} component={Settings} />
+    {/* <RouteWithSidebar exact path={Routes.Settings.path} component={Settings} /> */}
     <RouteWithSidebar exact path={Routes.BootstrapTables.path} component={BootstrapTables} />
 
     {/* components */}

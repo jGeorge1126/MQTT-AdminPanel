@@ -1,5 +1,16 @@
 
 export const Routes = {
+    //ride-move
+    Scooters: { path: "/scooters" },
+    ScootersDetail: { path: "/detail/:scooterID" },
+    Customers: { path: "/customers" },
+    Invoices: { path: "/invoices" },
+    Pricing: { path: "/pricing" },
+    Settings: { path: "/settings" },
+    IDVerification: { path: "/id-verification" },
+    UserAgreement: { path: "/user-agreement" },
+    HowToRide: { path: "/how-to-ride" },
+
     // pages
     Presentation: { path: "/" },
     DashboardOverview: { path: "/dashboard/overview" },
@@ -45,4 +56,6 @@ export const Routes = {
     Tooltips: { path: "/components/tooltips" },
     Toasts: { path: "/components/toasts" },
     WidgetsComponent: { path: "/components/widgets" }
+
+
 };
