@@ -4,8 +4,8 @@ import { Col, Row, Nav, Card, Button, Table, Dropdown, ProgressBar, Pagination, 
 import { useParams } from 'react-router-dom';
 import axios from "axios";
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://127.0.0.1:8080";
-// const ENDPOINT = "http://54.89.211.240:8080";
+// const ENDPOINT = "http://127.0.0.1:8080";
+const ENDPOINT = "http://54.89.211.240:8080";
 const socket = socketIOClient(ENDPOINT);
 
 // const location = useLocation();
