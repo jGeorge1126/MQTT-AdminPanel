@@ -6,8 +6,8 @@ import axios from "axios";
 import { AvailableScooters } from "../../components/Leaflet";
 // const location = useLocation();
 // console.log(location.state);
-const serverURL = "http://127.0.0.1:8080/"
-// const serverURL = "http://54.89.211.240:8080"
+// const serverURL = "http://127.0.0.1:8080/"
+const serverURL = "http://54.89.211.240:8080"
 const ScootersDetail = (props) => {
   const {scooterID} = useParams()
   const [scooterStatus, setScooterStatus] = useState({});
@@ -204,7 +204,7 @@ const ScootersDetail = (props) => {
         </Form.Label>
         <Col sm="8">
           <Form.Select aria-label="Default select example" id="speedUnit">
-            <option>none</option>
+            <option value='none'>none</option>
             <option value="0">kilometer</option>
             <option value="1">mile</option>
           </Form.Select>
@@ -220,26 +220,12 @@ const ScootersDetail = (props) => {
         </Form.Label>
         <Col sm="8">
           <Form.Select aria-label="Default select example" id="lampMode">
-            <option>none</option>
+            <option value="none">none</option>
             <option value="0">Command Control</option>
             <option value="1">Always On</option>
           </Form.Select>
           <Form.Text id="lampModeHelp" muted>
             0: Command Control 1: Always On
-          </Form.Text>
-        </Col>
-      </Form.Group>);
-    } else if(value === "53") {
-      tempComponent = (<Form.Group as={Row} className="mb-3" controlId="apnSetting">
-        <Form.Label column sm="4">
-          APN setting
-        </Form.Label>
-        <Col sm="8">
-          <Form.Control type="text" />
-          <Form.Text id="apnSettingHelp" muted>
-            AT+QICSGP=15,1,'apn','username','password',0
-            Example: If you want to set the APN as 123, username as 456, password as 789, send "a":53, "z":AT+QICSGP=15,1,"123","456","789",0
-            If there is no username and password, the relevant position is empty. Such as APN is 123, username is empty, password is empty, send "a":53, "z":AT+QICSGP=15,1,"123","","",0
           </Form.Text>
         </Col>
       </Form.Group>);
@@ -274,9 +260,33 @@ const ScootersDetail = (props) => {
   }
   function handleSentCommands(){
     var params = new Object;
-    params["scooterID"] = document.getElementById("scooterID").value
-    params["payload"] = "{'a':"+document.getElementById("commandlist").value+"}"
-    // if()
+    params.scooterID = document.getElementById("scooterID").value
+    params.payload = "{'a':"+document.getElementById("commandlist").value
+    var value = document.getElementById("commandlist").value
+    if(value === "13"){
+      params.payload += ",'k':20"+document.getElementById("speedInput").value
+    }else if(value === "23"){
+      params.payload += ",'l':"+document.getElementById("packageNumber").value
+    }else if(value === "67"){
+      params.payload += ",'x':"+document.getElementById("serialNumber").value+",'l':"+document.getElementById("dataLength").value+",'d':"+document.getElementById("firmwareData").value
+    }else if(value === "58"){
+      params.payload += ",'v':"+document.getElementById("numberRings").value+",'i':"+document.getElementById("timebuzzerRing").value+",'L':"+document.getElementById("timenotSound").value
+    }else if(value === "39"){
+      params.payload += ",'v':"+document.getElementById("vibrationSetting").value
+    }else if(value === "41"){
+      if(document.getElementById("speedUnit").value !== 'none'){
+        params.payload += ",'f':"+document.getElementById("speedUnit").value
+      }
+    }else if(value === "43"){
+      if(document.getElementById("lampmodeLabel").value !== 'none'){
+        params.payload += ",'j':"+document.getElementById("lampmodeLabel").value
+      }
+    }else if(value === "53"){
+      params.payload += ",'z':"+document.getElementById("apnSetting").value
+    }else if(value === "101"){
+      params.payload += ",'u':"+document.getElementById("serverParam").value
+    }
+    params.payload += "}"
     axios
       .get(serverURL+"scootersetting", {params} )
       .then((res) => {
