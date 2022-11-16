@@ -19,13 +19,12 @@ export default () => {
         })
     }
 
-    const pageVisits = [
-        { customerName: "tyler", email: "tyler@gmail.com", phone: "+12027953213", age: "34", driverID: "#234234", totalMoneyDeposit: "300", hoursRide: "3"},
-        { customerName: "tyler", email: "tyler@gmail.com", phone: "+12027953213", age: "34", driverID: "#234234", totalMoneyDeposit: "300", hoursRide: "3"},
-        { customerName: "tyler", email: "tyler@gmail.com", phone: "+12027953213", age: "34", driverID: "#234234", totalMoneyDeposit: "300", hoursRide: "3"},
-    ];
+    const onVerify = (id) => {
+        alert(id);
+    }
+
     const TableRow = (props) => {
-        const {  customerName, email, phone, age, driverID, totalMoneyDeposit, hoursRide } = props;
+        const { id, customerName, email, phone, age, driverID, totalMoneyDeposit, hoursRide } = props;
     
         return (
           <tr>
@@ -36,7 +35,10 @@ export default () => {
             <td>{driverID}</td>
             <td>{totalMoneyDeposit}</td>
             <td>{hoursRide}</td>
-            <td></td>
+            <td>
+                <Button variant="secondary" className="m-1"
+                onClick={(e)=> onVerify(id)}>Verify</Button>
+            </td>
           </tr>
         );
     };
@@ -66,7 +68,7 @@ export default () => {
                         <th scope="col">Drivers ID</th>
                         <th scope="col">Total money deposit</th>
                         <th scope="col">How many hours ride</th>
-                        <th scope="col">Path</th>
+                        <th scope="col">ID verification</th>
                     </tr>
                     </thead>
                     <tbody>

@@ -9,6 +9,7 @@ import Customers from "./ridemove/Customers";
 import Invoices from "./ridemove/Invoices";
 import Pricing from "./ridemove/Pricing";
 import PricingAdd from "./ridemove/PricingAdd";
+import PricingEdit from "./ridemove/PricingEdit";
 import Settings from "./ridemove/Settings";
 import IDVerification from "./ridemove/IDVerification";
 import UserAgreement from "./ridemove/UserAgreement";
@@ -128,6 +129,7 @@ export default () => (
     <RouteWithSidebar exact path={Routes.Invoices.path} component={Invoices} />
     <RouteWithSidebar exact path={Routes.Pricing.path} component={Pricing} />
     <RouteWithSidebar exact path={Routes.PricingAdd.path} component={PricingAdd} />
+    <RouteWithSidebar exact path={Routes.PricingEdit.path} component={PricingEdit} />
     <RouteWithSidebar exact path={Routes.Settings.path} component={Settings} />
     <RouteWithSidebar exact path={Routes.IDVerification.path} component={IDVerification} />
     <RouteWithSidebar exact path={Routes.UserAgreement.path} component={UserAgreement} />

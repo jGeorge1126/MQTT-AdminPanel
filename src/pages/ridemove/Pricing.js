@@ -1,7 +1,7 @@
 import React, {useState, useEffect } from 'react';
 import { Col, Row, Nav, Card, Button, Table, Dropdown, ProgressBar, Pagination, ButtonGroup } from '@themesberg/react-bootstrap';
 
-import { getPricings } from '../../firebaselmp/js/PricingsService';
+import { deletePricing, getPricings } from '../../firebaselmp/js/PricingsService';
 import { useLocation } from 'react-router-dom';
 import { Routes } from '../../routes';
 import { useHistory } from "react-router-dom";
@@ -18,18 +18,31 @@ export default () => {
     const getAllData = () => {
        
         getPricings().then(data=>{
-            console.log("data: ", data);
             setPricings(data);
         })
     }
 
+    const history = useHistory();
+    const navigateTo = () => history.push('/pricing/add');
+
     const onEdit = (id) => {
-        //alert(id);
-        alert("aa");
+        history.push({
+            pathname:'/pricing/edit',
+            id: id
+        });
     }
 
     const onDelete = (id) => {
-        //alert(id);
+        console.log("aa");
+        deletePricing(id)
+        .then(data => {
+            alert("succes")
+            window.location.reload();
+        })
+        .catch(e =>{
+            alert("fail");
+        });
+
     }
 
     const TableRow = (props) => {
@@ -41,15 +54,15 @@ export default () => {
             <td>{usageTime}</td>
             <td>{cost}</td>
             <td>
-                <Button variant="secondary" className="m-1" onClick={onEdit(id)}>Edit</Button>
-                <Button variant="secondary" className="m-1" onClick={onDelete(id)}>Delete</Button>
+                <Button variant="secondary" className="m-1"
+                onClick={(e)=> onEdit(id)}>Edit</Button>
+                <Button variant="secondary" className="m-1"
+                onClick={(e)=> onDelete(id)}>Delete</Button>
             </td>
           </tr>
         );
     };
 
-    const history = useHistory();
-    const navigateTo = () => history.push('/pricing/add');
     return (
         <>
             <Button variant="secondary" className="m-1" onClick={navigateTo}>Add</Button>

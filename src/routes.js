@@ -6,6 +6,8 @@ export const Routes = {
     Customers: { path: "/customers" },
     Invoices: { path: "/invoices" },
     Pricing: { path: "/pricing" },
+    PricingAdd: { path: "/pricing/add" },
+    PricingEdit: { path: "/pricing/edit" },
     Settings: { path: "/settings" },
     IDVerification: { path: "/id-verification" },
     UserAgreement: { path: "/user-agreement" },

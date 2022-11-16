@@ -3,16 +3,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Col, Row, Nav, Card, Form, Button, Table, Dropdown, ProgressBar, Pagination, ButtonGroup } from '@themesberg/react-bootstrap';
 import { faAngleDown, faAngleUp, faArrowDown, faArrowUp, faEdit, faEllipsisH, faExternalLinkAlt, faEye, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { getCustomers } from "../../firebaselmp/js/CustomersService";
-import { useLocation } from 'react-router-dom';
+import { useLocation, route } from 'react-router-dom';
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
-import { createPricing } from "../../firebaselmp/js/PricingsService";
+import { updatePricing, getPricingById } from "../../firebaselmp/js/PricingsService";
 const Container = styled('div')`
     .error {
         border-color: red !important;
     }
 `;
-export default () => {
+export default (props) => {
     const [plan, setPlan] = useState('');
     const [usageTime, setUsageTime] = useState('');
     const [cost, setCost] = useState('');
@@ -24,7 +24,6 @@ export default () => {
     const [costError, setCostError] = useState(false);
 
     const history = useHistory();
-
     const navigateTo = () => history.push('/pricing');
 
     const resetStates = ()=>{
@@ -37,8 +36,23 @@ export default () => {
         setCostError(false);
     }
 
+    const id = props.location.id;
+
+    useEffect(() => {
+        getPricingById(id)
+        .then(data => {
+            console.log("data: ", data);
+            setPlan(data.plan);
+            setUsageTime(data.usageTime);
+            setCost(data.cost);
+            //alert("success");
+        })
+        .catch(e => {
+            alert("fail");
+        })
+      }, []);
+
     const onSave = () => {
-        console.log("data: ", plan, usageTime, cost);
         if(plan === '' || usageTime === '' || cost === ''){
             setPlanError(plan === '');
             setUsageTimeError(usageTime === '');
@@ -46,13 +60,11 @@ export default () => {
             return;   
         }
 
-        createPricing(plan, usageTime, cost)
+        updatePricing(id, plan, usageTime, cost)
         .then(data => {
-            if(data.id !== '')
-            {
-                alert("succes")
-                resetStates();
-            }
+            alert("succes")
+            resetStates();
+            history.push('/pricing');
         })
         .catch(e =>{
             alert("fail");
@@ -65,7 +77,7 @@ export default () => {
                 <Card.Header>
                     <Row className="align-items-center">
                     <Col>
-                        <h5>Pricing Add</h5>
+                        <h5>Pricing Edit</h5>
                     </Col>
                     <Col className="text-end">
                         {/* <Button variant="secondary" size="sm">See all</Button> */}
@@ -76,7 +88,7 @@ export default () => {
                     <Form>
                         <Form.Group className="mb-3">
                             <Form.Label>plan</Form.Label>
-                            <Form.Control type="text" placeholder="Plan1" value={plan}
+                            <Form.Control type="text" value={plan}
                             className={planError? "input error" : "input"}
                             onChange={e => {
                                 setPlanError(false);
@@ -85,7 +97,7 @@ export default () => {
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>usageTime</Form.Label>
-                            <Form.Control type="text" placeholder="30min" value={usageTime}
+                            <Form.Control type="text" value={usageTime}
                             className={usageTimeError? "input error" : "input"}
                             onChange={e => {
                                 setUsageTimeError(false);
@@ -94,14 +106,14 @@ export default () => {
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>cost</Form.Label>
-                            <Form.Control type="text" placeholder="$0.23 USD/min" value={cost}
+                            <Form.Control type="text" value={cost}
                             className={costError? "input error" : "input"}
                             onChange={e => {
                                 setCostError(false);
                                 setCost(e.target.value);
                             }} />
                         </Form.Group>
-                        <Button type="submit" variant="secondary" className="m-2" onClick={onSave}>Add</Button>
+                        <Button type="submit" variant="secondary" className="m-2" onClick={onSave}>Save</Button>
                         <Button variant="primary" className="m-2" onClick={navigateTo}>Cancel</Button>                  
                     </Form>
                 </Card.Body>

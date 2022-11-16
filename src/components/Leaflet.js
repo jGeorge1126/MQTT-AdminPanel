@@ -11,8 +11,8 @@ import socketIOClient from "socket.io-client";
 import RoutineMachine from "./RountineMachine";
 import "../assets/img/lite_ride/withoutbattery.png";
 
-// const ENDPOINT = "http://127.0.0.1:8080";
-const ENDPOINT = "http://54.89.211.240:8080";
+const ENDPOINT = "http://127.0.0.1:8080";
+// const ENDPOINT = "http://54.89.211.240:8080";
 const socket = socketIOClient(ENDPOINT);
 const centerPosition = [43.6532, -79.3832];
 
@@ -72,13 +72,26 @@ export const PageVisitsTable = () => {
   );
 };
 
-export const AvailableScooters = (data) => {
-  const [scootermarkers, setScootermarker] = useState([]);
+export const AvailableScooters = (params) => {
   const history = useHistory();
+  const [scootermarkers, setScootermarker] = useState([]);
+  const [scooterStatus, setScooterStatus] = useState([]);
   useEffect(() => {
+    let isMounted = true
     socket.on("sendMessage", data => {
       var jsonResult = JSON.parse(data.text);
-      
+      if(params.type === "scooterdetail"){
+        if(jsonResult.i === params.scooterID){
+          setScooterStatus(p => {
+            let temp = [...p]
+            temp = [
+              jsonResult,
+              ...temp
+            ]
+            return [...temp]
+          });
+        }
+      }
       let updatedvalue = {
         i: jsonResult.i,
       };
@@ -99,22 +112,25 @@ export const AvailableScooters = (data) => {
         updatedvalue.c = jsonResult.c
       }
       
-      setScootermarker(p => {
-        let prevScooters = [...p]
-        const prevScooterIndex = p.findIndex(s => s.i === updatedvalue.i)
-        if (prevScooterIndex === -1) {
-          prevScooters.push(updatedvalue)
-        } else {
-          prevScooters[prevScooterIndex] = {
-            ...prevScooters[prevScooterIndex],
-            ...updatedvalue
+      if (isMounted) {
+        setScootermarker(p => {
+          let prevScooters = [...p]
+          const prevScooterIndex = p.findIndex(s => s.i === updatedvalue.i)
+          if (prevScooterIndex === -1) {
+            prevScooters.push(updatedvalue)
+          } else {
+            prevScooters[prevScooterIndex] = {
+              ...prevScooters[prevScooterIndex],
+              ...updatedvalue
+            }
           }
-        }
-        return [...prevScooters]
-      })
+          return [...prevScooters]
+        })
+      }
     });
+    return () => {isMounted = false}
   }, []);
-  if(data.type === "available"){
+  if(params.type === "available"){
     return (
       <Card border="light" className="shadow-sm p-4">
         <MapContainer
@@ -142,7 +158,7 @@ export const AvailableScooters = (data) => {
         </MapContainer>
       </Card>
     );
-  } else if (data.type === "inuse") {
+  } else if (params.type === "inuse") {
     return (
       <Card border="light" className="shadow-sm p-4">
         <MapContainer
@@ -170,7 +186,7 @@ export const AvailableScooters = (data) => {
         </MapContainer>
       </Card>
     );
-  } else if (data.type === "lowbattery") {
+  } else if (params.type === "lowbattery") {
     return (
       <Card border="light" className="shadow-sm p-4">
         <MapContainer
@@ -198,7 +214,7 @@ export const AvailableScooters = (data) => {
         </MapContainer>
       </Card>
     );
-  } else if (data.type === "all") {
+  } else if (params.type === "all") {
     return (
       <Card border="light" className="shadow-sm p-4">
         <MapContainer
@@ -240,6 +256,14 @@ export const AvailableScooters = (data) => {
         </MapContainer>
       </Card>
     );
+  } else if (params.type === "scooterdetail") {
+    return (
+      <Card border="light" className="shadow-sm p-4 overflow-auto" style={{height: "600px"}}>
+        {scooterStatus.map((s, i) => (
+          <span key={`${i}${s.i}`}>{JSON.stringify(s)}</span>
+        ))}
+      </Card>
+    )
   }
   
 };

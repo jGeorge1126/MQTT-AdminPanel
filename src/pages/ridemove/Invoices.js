@@ -32,6 +32,7 @@ export default () => {
             <td>{distanceRide}</td>
             <td>{timeRide}</td>
             <td>{cost}</td>
+            <td></td>
           </tr>
         );
       };
@@ -60,7 +61,8 @@ export default () => {
                         <th scope="col">Email</th>
                         <th scope="col">Distance Ride</th>
                         <th scope="col">Time Ride</th>
-                        <th scope="col">cost</th>
+                        <th scope="col">Cost</th>
+                        <th scope="col">Path</th>
                     </tr>
                     </thead>
                     <tbody>
