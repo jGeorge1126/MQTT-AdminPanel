@@ -13,8 +13,8 @@ import "leaflet-control-geocoder";
 import RoutineMachine from "./RountineMachine";
 import "../assets/img/lite_ride/withoutbattery.png";
 
-// const ENDPOINT = "http://127.0.0.1:8080";
-const ENDPOINT = "http://54.89.211.240:8080";
+const ENDPOINT = "http://127.0.0.1:8080";
+// const ENDPOINT = "http://54.89.211.240:8080";
 const socket = socketIOClient(ENDPOINT);
 const centerPosition = [43.6532, -79.3832];
 
@@ -80,15 +80,19 @@ export const AvailableScooters = (params) => {
   const [scooterStatus, setScooterStatus] = useState([]);
   const mapRef = useRef();
   const geocoder = L.Control.Geocoder.nominatim();  
-  const getAddress = (lat, lng) => { 
-    axios
-    .get("https://nominatim.openstreetmap.org/reverse?lat="+lat+"&lon="+lng+"&zoom=-8&addressdetails=1&format=json")
-    .then((res) => {
-      console.log(res)
-      return res.display_name;
-    });
-  }
+
   useEffect(() => {
+    // const getAddress = async (lat, lng) => { 
+    //   // await axios
+    //   // .get("https://nominatim.openstreetmap.org/reverse?lat="+lat+"&lon="+lng+"&zoom=-8&addressdetails=1&format=json")
+    //   // .then((res) => {
+    //   //   console.log(res)
+    //   //   return res.data.display_name;
+    //   // }).catch((err) => {
+    //   //   console.log(err);
+    //   // });
+    //   return "";
+    // }
     let isMounted = true
     socket.on("sendMessage", data => {
       var jsonResult = JSON.parse(data.text);
@@ -119,9 +123,8 @@ export const AvailableScooters = (params) => {
         
         updatedvalue.lat = temp[0]
         updatedvalue.lng = temp[1]
-        const address = getAddress(updatedvalue.lat, updatedvalue.lng)
-        updatedvalue.add = address
-        console.log(address)
+        // const address = getAddress(updatedvalue.lat, updatedvalue.lng)
+        // updatedvalue.add = address
       } else if(jsonResult.a == 27){
         updatedvalue.b = jsonResult.b
         updatedvalue.c = jsonResult.c
@@ -165,7 +168,7 @@ export const AvailableScooters = (params) => {
                 <Popup>
                   ID: { s.i }<br/>
                   Location: { s.lat }, { s.lng }<br/>
-                  Address: { JSON.stringify(s.add) }<br/>
+                  {/* Address: { s.add }<br/> */}
                   Battery: { s.b >= 0 ? s.b : '' }%<br/>
                   Status: { s.c == 0 ? 'On' : 'Off' }
                 </Popup>
@@ -195,7 +198,7 @@ export const AvailableScooters = (params) => {
                 <Popup>
                   ID: { s.i }<br/>
                   Location: { s.lat }, { s.lng }<br/>
-                  Address: { s.add }<br/>
+                  {/* Address: { s.add }<br/> */}
                   Battery: { s.b >= 0 ? s.b : '' }%<br/>
                   Status: { s.c == 0 ? 'On' : 'Off' }
                 </Popup>
@@ -225,7 +228,7 @@ export const AvailableScooters = (params) => {
                 <Popup>
                   ID: { s.i }<br/>
                   Location: { s.lat }, { s.lng }<br/>
-                  Address: { s.add }<br/>
+                  {/* Address: { s.add }<br/> */}
                   Battery: { s.b >= 0 ? s.b : '' }%<br/>
                   Status: { s.c == 0 ? 'On' : 'Off' }
                 </Popup>
@@ -269,7 +272,7 @@ export const AvailableScooters = (params) => {
                 <Popup>
                   ID: { s.i }<br/>
                   Location: { s.lat }, { s.lng }<br/>
-                  Address: { s.add }<br/>
+                  {/* Address: { s.add }<br/> */}
                   Battery: { s.b >= 0 ? s.b : '' }%<br/>
                   Status: { s.c == 0 ? 'On' : 'Off' }
                 </Popup>
