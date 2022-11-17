@@ -1,13 +1,15 @@
 import L from "leaflet";
-import React, { useState, useEffect, Fragment } from "react";
+import axios from "axios";
+import React, { useState, useEffect, Fragment, useRef } from "react";
 import { useHistory } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp, faArrowDown, faArrowUp, faEdit, faEllipsisH, faExternalLinkAlt, faEye, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Nav, Card, Button, Table, Dropdown, ProgressBar, Pagination, ButtonGroup } from '@themesberg/react-bootstrap';
 import { pageVisits } from "../data/tables";
 
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Map } from "react-leaflet";
 import socketIOClient from "socket.io-client";
+import "leaflet-control-geocoder";
 import RoutineMachine from "./RountineMachine";
 import "../assets/img/lite_ride/withoutbattery.png";
 
@@ -76,6 +78,16 @@ export const AvailableScooters = (params) => {
   const history = useHistory();
   const [scootermarkers, setScootermarker] = useState([]);
   const [scooterStatus, setScooterStatus] = useState([]);
+  const mapRef = useRef();
+  const geocoder = L.Control.Geocoder.nominatim();  
+  const getAddress = (lat, lng) => { 
+    axios
+    .get("https://nominatim.openstreetmap.org/reverse?lat="+lat+"&lon="+lng+"&zoom=-8&addressdetails=1&format=json")
+    .then((res) => {
+      console.log(res)
+      return res.display_name;
+    });
+  }
   useEffect(() => {
     let isMounted = true
     socket.on("sendMessage", data => {
@@ -107,6 +119,9 @@ export const AvailableScooters = (params) => {
         
         updatedvalue.lat = temp[0]
         updatedvalue.lng = temp[1]
+        const address = getAddress(updatedvalue.lat, updatedvalue.lng)
+        updatedvalue.add = address
+        console.log(address)
       } else if(jsonResult.a == 27){
         updatedvalue.b = jsonResult.b
         updatedvalue.c = jsonResult.c
@@ -130,14 +145,16 @@ export const AvailableScooters = (params) => {
     });
     return () => {isMounted = false}
   }, []);
+
   if(params.type === "available"){
     return (
       <Card border="light" className="shadow-sm p-4">
         <MapContainer
           doubleClickZoom={false}
           id="availablescootersmap"
-          zoom={14}
+          zoom={1}
           center={centerPosition}
+          ref={mapRef}
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -148,6 +165,7 @@ export const AvailableScooters = (params) => {
                 <Popup>
                   ID: { s.i }<br/>
                   Location: { s.lat }, { s.lng }<br/>
+                  Address: { JSON.stringify(s.add) }<br/>
                   Battery: { s.b >= 0 ? s.b : '' }%<br/>
                   Status: { s.c == 0 ? 'On' : 'Off' }
                 </Popup>
@@ -163,9 +181,10 @@ export const AvailableScooters = (params) => {
       <Card border="light" className="shadow-sm p-4">
         <MapContainer
           doubleClickZoom={false}
-          id="availablescootersmap"
-          zoom={14}
+          id="inusescootersmap"
+          zoom={1}
           center={centerPosition}
+          ref={mapRef}
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -176,6 +195,7 @@ export const AvailableScooters = (params) => {
                 <Popup>
                   ID: { s.i }<br/>
                   Location: { s.lat }, { s.lng }<br/>
+                  Address: { s.add }<br/>
                   Battery: { s.b >= 0 ? s.b : '' }%<br/>
                   Status: { s.c == 0 ? 'On' : 'Off' }
                 </Popup>
@@ -191,9 +211,10 @@ export const AvailableScooters = (params) => {
       <Card border="light" className="shadow-sm p-4">
         <MapContainer
           doubleClickZoom={false}
-          id="availablescootersmap"
-          zoom={14}
+          id="lowbatteryscootersmap"
+          zoom={1}
           center={centerPosition}
+          ref={mapRef}
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -204,6 +225,7 @@ export const AvailableScooters = (params) => {
                 <Popup>
                   ID: { s.i }<br/>
                   Location: { s.lat }, { s.lng }<br/>
+                  Address: { s.add }<br/>
                   Battery: { s.b >= 0 ? s.b : '' }%<br/>
                   Status: { s.c == 0 ? 'On' : 'Off' }
                 </Popup>
@@ -220,8 +242,9 @@ export const AvailableScooters = (params) => {
         <MapContainer
           doubleClickZoom={false}
           id="availablescootersmap"
-          zoom={14}
+          zoom={1}
           center={centerPosition}
+          ref={mapRef}
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -246,6 +269,7 @@ export const AvailableScooters = (params) => {
                 <Popup>
                   ID: { s.i }<br/>
                   Location: { s.lat }, { s.lng }<br/>
+                  Address: { s.add }<br/>
                   Battery: { s.b >= 0 ? s.b : '' }%<br/>
                   Status: { s.c == 0 ? 'On' : 'Off' }
                 </Popup>

@@ -40,6 +40,7 @@
     "chartist-plugin-tooltips-updated": "^0.1.4",
     "firebase": "^9.14.0",
     "leaflet": "^1.9.2",
+    "leaflet-control-geocoder": "^2.4.0",
     "leaflet-routing-machine": "^3.2.12",
     "moment-timezone": "^0.5.31",
     "mqtt": "^4.3.7",
