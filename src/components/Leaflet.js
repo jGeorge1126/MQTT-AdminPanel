@@ -13,8 +13,8 @@ import "leaflet-control-geocoder";
 import RoutineMachine from "./RountineMachine";
 import "../assets/img/lite_ride/withoutbattery.png";
 
-const ENDPOINT = "http://127.0.0.1:8080";
-// const ENDPOINT = "http://54.89.211.240:8080";
+// const ENDPOINT = "http://127.0.0.1:8080";
+const ENDPOINT = "http://54.89.211.240:8080";
 const socket = socketIOClient(ENDPOINT);
 const centerPosition = [43.6532, -79.3832];
 
