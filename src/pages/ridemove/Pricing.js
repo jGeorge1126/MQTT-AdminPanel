@@ -65,7 +65,6 @@ export default () => {
 
     return (
         <>
-            <Button variant="secondary" className="m-1" onClick={navigateTo}>Add</Button>
             <Card border="light" className="shadow-sm">
                 <Card.Header>
                     <Row className="align-items-center">
@@ -76,6 +75,7 @@ export default () => {
                         {/* <Button variant="secondary" size="sm">See all</Button> */}
                     </Col>
                     </Row>
+                    <Button variant="secondary" className="m-1" onClick={navigateTo}>Add</Button>
                 </Card.Header>
 
 

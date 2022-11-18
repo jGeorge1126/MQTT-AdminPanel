@@ -27,3 +27,13 @@ export const getCustomers = () => {
         return customers;
     })
 }
+
+export const getCustomerById = async(id) => {
+    return (await getDoc(doc(db, collection_customer, id))).data();
+}
+
+export const updateIDVerification = (id, IDVerStatus) => {
+    return updateDoc(doc(db, collection_customer, id), {
+        IDVerStatus: IDVerStatus
+    });
+}

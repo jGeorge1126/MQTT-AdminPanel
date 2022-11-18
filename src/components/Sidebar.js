@@ -101,7 +101,7 @@ export default (props = {}) => {
 
               <NavItem title="Overview" link={Routes.DashboardOverview.path} />
               <NavItem title="Scooters" link={Routes.Scooters.path} />
-              <NavItem title="Customers" link={Routes.Customers.path} />
+              <NavItem title="Customers" link={Routes.Customers.path} />  
               <NavItem title="Invoices" link={Routes.Invoices.path} />
               <NavItem title="Pricing" link={Routes.Pricing.path} />
               <NavItem title="Settings" link={Routes.Settings.path} />

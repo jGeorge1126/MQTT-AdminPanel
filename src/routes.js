@@ -1,6 +1,8 @@
 
 export const Routes = {
     //ride-move
+    Login: {path: "/"},
+    Login: {path: "/login"},
     Scooters: { path: "/scooters" },
     ScootersDetail: { path: "/detail/:scooterID" },
     Customers: { path: "/customers" },
@@ -11,10 +13,12 @@ export const Routes = {
     Settings: { path: "/settings" },
     IDVerification: { path: "/id-verification" },
     UserAgreement: { path: "/user-agreement" },
+    UserAgreementAdd: { path: "/user-agreement/add" },
+    UserAgreementEdit: { path: "/user-agreement/edit" },
     HowToRide: { path: "/how-to-ride" },
 
     // pages
-    Presentation: { path: "/" },
+    Presentation: { path: "/presentation" },
     DashboardOverview: { path: "/dashboard/overview" },
     Transactions: { path: "/transactions" },
     Settings: { path: "/settings" },

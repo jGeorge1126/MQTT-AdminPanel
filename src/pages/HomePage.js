@@ -3,6 +3,7 @@ import { Route, Switch, Redirect } from "react-router-dom";
 import { Routes } from "../routes";
 
 // ride move
+import Login from "./ridemove/Login";
 import Scooters from "./ridemove/Scooters";
 import ScootersDetail from "./ridemove/ScootersDetail";
 import Customers from "./ridemove/Customers";
@@ -13,6 +14,8 @@ import PricingEdit from "./ridemove/PricingEdit";
 import Settings from "./ridemove/Settings";
 import IDVerification from "./ridemove/IDVerification";
 import UserAgreement from "./ridemove/UserAgreement";
+import UserAgreementAdd from "./ridemove/UserAgreementAdd";
+import UserAgreementEdit from "./ridemove/UserAgreementEdit";
 import HowToRide from "./ridemove/HowToRide";
 
 // pages
@@ -123,6 +126,7 @@ export default () => (
     <RouteWithLoader exact path={Routes.ServerError.path} component={ServerError} />
 
     {/* ride move */}
+    <RouteWithLoader exact path={Routes.Login.path} component={Login} />
     <RouteWithSidebar exact path={Routes.Scooters.path} component={Scooters} />
     <RouteWithSidebar exact path={Routes.ScootersDetail.path} component={ScootersDetail} />
     <RouteWithSidebar exact path={Routes.Customers.path} component={Customers} />
@@ -133,6 +137,8 @@ export default () => (
     <RouteWithSidebar exact path={Routes.Settings.path} component={Settings} />
     <RouteWithSidebar exact path={Routes.IDVerification.path} component={IDVerification} />
     <RouteWithSidebar exact path={Routes.UserAgreement.path} component={UserAgreement} />
+    <RouteWithSidebar exact path={Routes.UserAgreementAdd.path} component={UserAgreementAdd} />
+    <RouteWithSidebar exact path={Routes.UserAgreementEdit.path} component={UserAgreementEdit} />
     <RouteWithSidebar exact path={Routes.HowToRide.path} component={HowToRide} />
 
     {/* pages */}
@@ -169,6 +175,6 @@ export default () => (
     <RouteWithSidebar exact path={Routes.DocsBuild.path} component={DocsBuild} />
     <RouteWithSidebar exact path={Routes.DocsChangelog.path} component={DocsChangelog} />
 
-    <Redirect to={Routes.NotFound.path} />
+    <Redirect to={Routes.Login.path} />
   </Switch>
 );

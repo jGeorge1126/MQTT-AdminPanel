@@ -8,7 +8,7 @@ export default () => {
         <h2>Scooters Page</h2>
         <Row>
             <Col xs={12} xl={12} className="mb-4">
-                <AvailableScooters type={"all"} />
+                <AvailableScooters type="allscooters" />
             </Col>
         </Row>
       </>

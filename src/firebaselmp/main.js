@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app';
+import {initializeApp} from 'firebase/app';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore } from "firebase/firestore";
 
@@ -12,6 +12,8 @@ const firebaseConfig = {
     appId: "1:257318589642:web:8f453933ac8c3a22235033",
     measurementId: "G-FXK8V2Y03F"
   };
+
+
 
 const firebase = initializeApp(firebaseConfig);
 export const auth = getAuth();

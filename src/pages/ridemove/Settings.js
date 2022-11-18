@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Col, Row, Nav, Card, Form, Button, Table, Dropdown, ProgressBar, Pagination, ButtonGroup } from '@themesberg/react-bootstrap';
 import styled from "styled-components";
+import axios from 'axios';
+import { updateUser } from '../../firebaselmp/js/UserService';
 
-
+const serverURL = "http://54.89.211.240:8080/"
 const Container = styled('div')`
     .error {
         border-color: red !important;
     }
 `;
 export default () => {
+    const [id, setId] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [firstname, setFirstname] = useState('');
@@ -21,7 +24,40 @@ export default () => {
 
     const onSave = () => {
         console.log("settings onsave");
+        const param = {
+            id: id,
+            email: email,
+            password: password
+        }
+
+        // update admin user Email and Password
+        axios
+        .post(serverURL+'updateEmailAndPassword', param)
+        .then((res) =>{
+            console.log("res: ", res);
+            alert("success");
+        })
+        .catch(err => {
+            console.error(err);
+        });
+
+        // update admin user firstname and lastname;
+        updateUser(id, firstname, lastname)
+        .then(res => {
+            
+        })
     }
+
+    useEffect(() => {
+        const profile = JSON.parse(localStorage.getItem("profile"));
+        console.log("profile: ", profile);
+        
+        setId(profile.id);
+        setEmail(profile.email);
+        setPassword(profile.password);
+        setFirstname(profile.firstname);
+        setLastname(profile.lastname);
+    }, []);
     
     return (
         <Container>
@@ -49,7 +85,7 @@ export default () => {
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>password</Form.Label>
-                            <Form.Control type="text" value={password}
+                            <Form.Control type="password" value={password}
                             className={passwordError? "input error" : "input"}
                             onChange={e => {
                                 setPasswordError(false);
@@ -57,7 +93,7 @@ export default () => {
                             }} />
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>fistname</Form.Label>
+                            <Form.Label>firstname</Form.Label>
                             <Form.Control type="text" value={firstname}
                             className={firstnameError? "input error" : "input"}
                             onChange={e => {

@@ -7,12 +7,13 @@ import { AvailableScooters } from "../../components/Leaflet";
 // const location = useLocation();
 // console.log(location.state);
 // const serverURL = "http://127.0.0.1:8080/"
-const serverURL = "http://54.89.211.240:8080"
+const serverURL = "http://54.89.211.240:8080/"
 const ScootersDetail = (props) => {
   const {scooterID} = useParams()
   const [scooterStatus, setScooterStatus] = useState({});
   const [detailComponent, setDetailComponent] = useState();
-  // const params = props.location.state
+  // console.log(props.location.state)
+  const scooterDefaultStatus = props.location.state
   function handleBattery(event) {
     var params = new Object;
     var status = event.target.checked;
@@ -310,17 +311,17 @@ const ScootersDetail = (props) => {
                       Scooter ID
                     </Form.Label>
                     <Col sm="8">
-                      <Form.Control plaintext readOnly defaultValue={scooterID} />
+                      <Form.Control type="text" placeholder="Enter ScooterID" defaultValue={scooterID} />
                     </Col>
                   </Form.Group>
-                  <Form.Group as={Row} className="mb-3" controlId="formPlaintextMqttPort">
+                  {/* <Form.Group as={Row} className="mb-3" controlId="formPlaintextMqttPort">
                     <Form.Label column sm="4">
                       MQTT Port
                     </Form.Label>
                     <Col sm="8">
                       <Form.Control plaintext readOnly defaultValue="1883" />
                     </Col>
-                  </Form.Group>
+                  </Form.Group> */}
                   <Form.Group as={Row} className="mb-3" controlId="formPlaintextLockBattery">
                     <Form.Label column sm="4">
                       Lock Battery
@@ -329,14 +330,14 @@ const ScootersDetail = (props) => {
                       <Form.Check type="switch" id="switchlockbattery" onChange={handleBattery}/>
                     </Col>
                   </Form.Group>
-                  <Form.Group as={Row} className="mb-3" controlId="formPlaintextIPAddress">
+                  {/* <Form.Group as={Row} className="mb-3" controlId="formPlaintextIPAddress">
                     <Form.Label column sm="4">
                       IP Address
                     </Form.Label>
                     <Col sm="8">
                       <Form.Control plaintext readOnly defaultValue="101.37.148.19" />
                     </Col>
-                  </Form.Group>
+                  </Form.Group> */}
                   <Form.Group as={Row} className="mb-3" controlId="formPlaintextScooterLights">
                     <Form.Label column sm="4">
                       Scooter Lights
