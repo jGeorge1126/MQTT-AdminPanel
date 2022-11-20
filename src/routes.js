@@ -1,7 +1,6 @@
 
 export const Routes = {
     //ride-move
-    Login: {path: "/"},
     Login: {path: "/login"},
     Scooters: { path: "/scooters" },
     ScootersDetail: { path: "/detail/:scooterID" },

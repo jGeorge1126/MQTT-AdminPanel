@@ -85,32 +85,8 @@ export default () => {
                                 setDescriptionError(false);
                                 setDescription(e.target.value);
                             }} />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <div>
-                                <h1>Upload and Display Image usign React Hook's</h1>
-                                {selectedImage && (
-                                    <div>
-                                    <img alt="not fount" width={"250px"} src={URL.createObjectURL(selectedImage)} />
-                                    <br />
-                                    <button onClick={()=>setSelectedImage(null)}>Remove</button>
-                                    </div>
-                                )}
-                                <br />
-                                
-                                <br /> 
-                                <input
-                                    type="file"
-                                    name="myImage"
-                                    onChange={(event) => {
-                                    console.log(event.target.files[0]);
-                                    setSelectedImage(event.target.files[0]);
-                                    }}
-                                />
-                            </div>
-                        </Form.Group>
-                       
-                        <Button type="submit" variant="secondary" className="m-2" onClick={onSave}>Add</Button>
+                        </Form.Group>                       
+                        <Button type="button" variant="secondary" className="m-2" onClick={onSave}>Add</Button>
                         <Button variant="primary" className="m-2" onClick={navigateTo}>Cancel</Button>                  
                     </Form>
                 </Card.Body>

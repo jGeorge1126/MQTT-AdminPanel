@@ -53,7 +53,7 @@ export default () => {
                 return;
             } else {
                 localStorage.setItem("profile", JSON.stringify({...data.profile, email: email, password: password}));
-                localStorage.setItem("isAuthenticated", "true");
+                localStorage.setItem("isAuthenticated", true);
                 console.log("localStorage: ", localStorage.getItem("profile"));
                 history.push("/dashboard/overview");
             }
@@ -76,7 +76,7 @@ export default () => {
                             <Form.Group id="email" className="mb-4">
                                 <Form.Label>Your Email</Form.Label>
                                 <InputGroup>
-                                    <InputGroup.Text>
+                                    <InputGroup.Text className={emailError? "input error" : "input"}>
                                         <FontAwesomeIcon icon={faEnvelope} />
                                     </InputGroup.Text>
                                     <Form.Control autoFocus type="email" placeholder="example@company.com"
@@ -92,7 +92,7 @@ export default () => {
                                 <Form.Group id="password" className="mb-4">
                                 <Form.Label>Your Password</Form.Label>
                                 <InputGroup>
-                                    <InputGroup.Text>
+                                    <InputGroup.Text className={passwordError? "input error" : "input"}>
                                     <FontAwesomeIcon icon={faUnlockAlt} />
                                     </InputGroup.Text>
                                     <Form.Control type="password" placeholder="Password" 
@@ -116,7 +116,7 @@ export default () => {
                                 </div> */}
                             </Form.Group>
                             <div style={{textAlign:"center"}}>
-                                <Button variant="primary" type="submit" onClick={onLogin}>
+                                <Button variant="primary" type="button" onClick={onLogin}>
                                     Enter
                                 </Button>
                             </div>

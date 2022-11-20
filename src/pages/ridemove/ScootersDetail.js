@@ -12,7 +12,6 @@ const ScootersDetail = (props) => {
   const {scooterID} = useParams()
   const [scooterStatus, setScooterStatus] = useState({});
   const [detailComponent, setDetailComponent] = useState();
-  // console.log(props.location.state)
   const scooterDefaultStatus = props.location.state
   function handleBattery(event) {
     var params = new Object;
@@ -96,6 +95,9 @@ const ScootersDetail = (props) => {
         </Form.Label>
         <Col sm="8">
           <Form.Control type="number" max={30} min={0} />
+          <Form.Text id="packageNumberHelp" muted>
+            0-30 km/h
+          </Form.Text>
         </Col>
       </Form.Group>);
     } else if(value === "23") {
@@ -231,31 +233,82 @@ const ScootersDetail = (props) => {
         </Col>
       </Form.Group>);
     } else if(value === "53") {
-      tempComponent = (<Form.Group as={Row} className="mb-3" controlId="apnSetting">
+      tempComponent = (
+      <>
+      <Form.Group as={Row} className="mb-3" controlId="apn">
         <Form.Label column sm="4">
           APN setting
         </Form.Label>
         <Col sm="8">
           <Form.Control type="text" />
-          <Form.Text id="apnSettingHelp" muted>
-            AT+QICSGP=15,1,'apn','username','password',0
-            Example: If you want to set the APN as 123, username as 456, password as 789, send "a":53, "z":AT+QICSGP=15,1,"123","456","789",0
-            If there is no username and password, the relevant position is empty. Such as APN is 123, username is empty, password is empty, send "a":53, "z":AT+QICSGP=15,1,"123","","",0
-          </Form.Text>
         </Col>
-      </Form.Group>);
-    } else if(value === "101") {
-      tempComponent = (<Form.Group as={Row} className="mb-3" controlId="serverParam">
+      </Form.Group>
+      <Form.Group as={Row} className="mb-3" controlId="apnusername">
         <Form.Label column sm="4">
-          Set server parameters
+          Username
         </Form.Label>
         <Col sm="8">
           <Form.Control type="text" />
-          <Form.Text id="serverParamHelp" muted>
-            18.180.156.177: 1883:username :password:
+        </Col>
+      </Form.Group>
+      <Form.Group as={Row} className="mb-3" controlId="apnpassword">
+        <Form.Label column sm="4">
+          Password
+        </Form.Label>
+        <Col sm="8">
+          <Form.Control type="text" />
+        </Col>
+      </Form.Group>
+      </>);
+    } else if(value === "101") {
+      tempComponent = (
+      <>
+      <Form.Group as={Row} className="mb-3" controlId="serverIP">
+        <Form.Label column sm="4">
+          IP
+        </Form.Label>
+        <Col sm="8">
+          <Form.Control type="text" />
+          <Form.Text id="serverIPHelp" muted>
+            0:0:0:0
           </Form.Text>
         </Col>
-      </Form.Group>);
+      </Form.Group>
+      <Form.Group as={Row} className="mb-3" controlId="serverPort">
+        <Form.Label column sm="4">
+          Port
+        </Form.Label>
+        <Col sm="8">
+          <Form.Control type="text" />
+          <Form.Text id="serverPortHelp" muted>
+            1883
+          </Form.Text>
+        </Col>
+      </Form.Group>
+      <Form.Group as={Row} className="mb-3" controlId="serverUserName">
+        <Form.Label column sm="4">
+          Username
+        </Form.Label>
+        <Col sm="8">
+          <Form.Control type="text" />
+          <Form.Text id="serverUserNameHelp" muted>
+            "username"
+          </Form.Text>
+        </Col>
+      </Form.Group>
+      <Form.Group as={Row} className="mb-3" controlId="serverPassword">
+        <Form.Label column sm="4">
+          Password
+        </Form.Label>
+        <Col sm="8">
+          <Form.Control type="text" />
+          <Form.Text id="serverPasswordHelp" muted>
+            "password"
+          </Form.Text>
+        </Col>
+      </Form.Group>
+      </>
+      );
     }
     setDetailComponent(tempComponent) 
   }
@@ -283,9 +336,9 @@ const ScootersDetail = (props) => {
         params.payload += ",'j':"+document.getElementById("lampmodeLabel").value
       }
     }else if(value === "53"){
-      params.payload += ",'z':"+document.getElementById("apnSetting").value
+      params.payload += ",'z':AT+QICSGP=15,1,'"+document.getElementById("apn").value+"','"+document.getElementById("apnusername").value+"','"+document.getElementById("apnpassword").value+"',0"
     }else if(value === "101"){
-      params.payload += ",'u':"+document.getElementById("serverParam").value
+      params.payload += ",'u':"+document.getElementById("serverIP").value+":"+document.getElementById("serverPort")+":"+document.getElementById("serverUserName")+":"+document.getElementById("serverPassword")+":"
     }
     params.payload += "}"
     axios
@@ -314,14 +367,6 @@ const ScootersDetail = (props) => {
                       <Form.Control type="text" placeholder="Enter ScooterID" defaultValue={scooterID} />
                     </Col>
                   </Form.Group>
-                  {/* <Form.Group as={Row} className="mb-3" controlId="formPlaintextMqttPort">
-                    <Form.Label column sm="4">
-                      MQTT Port
-                    </Form.Label>
-                    <Col sm="8">
-                      <Form.Control plaintext readOnly defaultValue="1883" />
-                    </Col>
-                  </Form.Group> */}
                   <Form.Group as={Row} className="mb-3" controlId="formPlaintextLockBattery">
                     <Form.Label column sm="4">
                       Lock Battery
@@ -330,14 +375,6 @@ const ScootersDetail = (props) => {
                       <Form.Check type="switch" id="switchlockbattery" onChange={handleBattery}/>
                     </Col>
                   </Form.Group>
-                  {/* <Form.Group as={Row} className="mb-3" controlId="formPlaintextIPAddress">
-                    <Form.Label column sm="4">
-                      IP Address
-                    </Form.Label>
-                    <Col sm="8">
-                      <Form.Control plaintext readOnly defaultValue="101.37.148.19" />
-                    </Col>
-                  </Form.Group> */}
                   <Form.Group as={Row} className="mb-3" controlId="formPlaintextScooterLights">
                     <Form.Label column sm="4">
                       Scooter Lights
@@ -376,31 +413,17 @@ const ScootersDetail = (props) => {
                         <option value="13">Set the speed limit data</option>
                         <option value="15">Query vehicle parameters</option>
                         <option value="18">Query GPS location data</option>
-                        <option value="20">Reboot IOT</option>
-                        <option value="93">Reboot IOT if Updated</option>
-                        <option value="21">Qurey hardware and firmware version</option>
-                        <option value="23">Start Upgrade firmware</option>
-                        <option value="67">Send updating data</option>
-                        <option value="24">Query IEMI number</option>
-                        <option value="26">Enter transport mode</option>
                         <option value="58">Special alarm buzzer</option>
-                        <option value="35">Query server parameters</option>
                         <option value="39">Vibration sensitivity setting</option>
                         <option value="41">Kilometer or mile switch setting</option>
                         <option value="43">Lamp mode setting</option>
-                        <option value="45">Set protection of motor controller’s temperature</option>
-                        <option value="47">Get QCELLLOC</option>
-                        <option value="53">APN setting</option>
-                        <option value="71">Chainlock unlock</option>
+                        <option value="45">Set protection of motor controller’s temperature / Doesn't exist</option>
+                        <option value="71">Chainlock unlock / Doesn't Exist</option>
                         <option value="73">Enter to pause mode</option>
                         <option value="75">Exit pause mode</option>
-                        <option value="77">Query IOT Log</option>
-                        <option value="79">Open the station lock</option>
-                        <option value="81">Close the station lock</option>
+                        <option value="79">Open the station lock / Doesn't exist</option>
+                        <option value="81">Close the station lock / Doesn't exist</option>
                         <option value="83">Query status of chain lock</option>
-                        <option value="97">Query 4G signal intensity</option>
-                        <option value="101">Set Iot Parameters</option>
-                        <option value="103">Modify IOT SN</option>
                       </Form.Select>
                     </Col>
                   </Form.Group>

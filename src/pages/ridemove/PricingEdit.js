@@ -113,7 +113,7 @@ export default (props) => {
                                 setCost(e.target.value);
                             }} />
                         </Form.Group>
-                        <Button type="submit" variant="secondary" className="m-2" onClick={onSave}>Save</Button>
+                        <Button type="button" variant="secondary" className="m-2" onClick={onSave}>Save</Button>
                         <Button variant="primary" className="m-2" onClick={navigateTo}>Cancel</Button>                  
                     </Form>
                 </Card.Body>

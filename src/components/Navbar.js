@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faCog, faEnvelopeOpen, faSearch, faSignOutAlt, faUserShield } from "@fortawesome/free-solid-svg-icons";
 import { faUserCircle } from "@fortawesome/free-regular-svg-icons";
@@ -51,11 +51,19 @@ export default (props) => {
   const history = useHistory();
 
   const onLogout = () => {
-    console.log("ssss");
     logOut();
-      
+    localStorage.setItem("isAuthenticated", false);
     history.push('/login');
   }
+
+  const isAuthenticated = localStorage.getItem("isAuthenticated");
+
+  useEffect(() => {
+    console.log("isAuthenticated: ", !isAuthenticated);
+    if (isAuthenticated == "false") history.push("/login");
+  }, []);
+
+
   return (
     <Navbar variant="dark" expanded className="ps-0 pe-2 pb-0">
       <Container fluid className="px-0">

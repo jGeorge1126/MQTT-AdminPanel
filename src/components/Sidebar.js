@@ -105,7 +105,6 @@ export default (props = {}) => {
               <NavItem title="Invoices" link={Routes.Invoices.path} />
               <NavItem title="Pricing" link={Routes.Pricing.path} />
               <NavItem title="Settings" link={Routes.Settings.path} />
-              <NavItem title="ID Verification" link={Routes.IDVerification.path} />
               <NavItem title="User Agreement" link={Routes.UserAgreement.path} />
               <NavItem title="How to Ride" link={Routes.HowToRide.path} />
             </Nav>
