@@ -4,14 +4,14 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyC6iia2353HlEK8Xzp8u0xPAg_pjlTHqFM",
+    apiKey: "API KEY",
     authDomain: "ride-move.firebaseapp.com",
-    databaseURL: "https://ride-move-default-rtdb.firebaseio.com",
-    projectId: "ride-move",
-    storageBucket: "ride-move.appspot.com",
-    messagingSenderId: "257318589642",
-    appId: "1:257318589642:web:8f453933ac8c3a22235033",
-    measurementId: "G-FXK8V2Y03F"
+    databaseURL: "DatabaseURL",
+    projectId: "ProjectID",
+    storageBucket: "StorageBucket",
+    messagingSenderId: "MessagingSenderID",
+    appId: "APP ID",
+    measurementId: "MeasurementID"
   };
 
 
