@@ -80,7 +80,6 @@ export default () => {
                     </Modal.Header>
                     <Modal.Body>
                         <div className="user-avatar lg-avatar me-6" style={{height:"16rem", width:"10rem"}}>
-                            {/* <Image src="https://firebasestorage.googleapis.com/v0/b/ride-move.appspot.com/o/download.jfif?alt=media&token=4fc95598-43eb-407b-8919-f687c3c092fd" className="card-img-top border-white" /> */}
                             <Image src={img} className="card-img-top border-white" />
                         </div>
                         <Form>
